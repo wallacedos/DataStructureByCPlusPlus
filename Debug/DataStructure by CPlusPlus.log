@@ -1,2 +1,10 @@
 ﻿  main.cpp
-  DataStructure by CPlusPlus.vcxproj -> D:\Algorithms and DataStructure\DataStructure by CPlusPlus\Debug\DataStructure by CPlusPlus.exe
+D:\DataStructure by CPlusPlus\main.cpp(1,1): warning C4819:  该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+D:\DataStructure by CPlusPlus\main.cpp(80,10): error C2001:  常量中有换行符
+D:\DataStructure by CPlusPlus\main.cpp(81,2): error C2146:  语法错误: 缺少“;”(在标识符“permutations”的前面)
+D:\DataStructure by CPlusPlus\main.cpp(83,10): error C2001:  常量中有换行符
+D:\DataStructure by CPlusPlus\main.cpp(84,2): error C2144:  语法错误:“int”的前面应有“;”
+D:\DataStructure by CPlusPlus\main.cpp(86,10): error C2001:  常量中有换行符
+D:\DataStructure by CPlusPlus\main.cpp(87,2): error C2146:  语法错误: 缺少“;”(在标识符“result”的前面)
+D:\DataStructure by CPlusPlus\main.cpp(89,10): error C2001:  常量中有换行符
+D:\DataStructure by CPlusPlus\main.cpp(90,2): error C2146:  语法错误: 缺少“;”(在标识符“cout”的前面)
