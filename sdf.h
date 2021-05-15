@@ -11,7 +11,8 @@
 版权：2021-2025
 作者：闫英伟
 
-历史：1.2021/5/1加入了“深入理解指针与递归函数”文章的功能函数。
+历史：1. 2021/5/1加入了“深入理解指针与递归函数”文章的功能函数；
+      2. 2021/5/9加入了“基本排序方法”文章的功能函数；
 
 ********************************************************************************************************************************/
 
@@ -23,6 +24,7 @@ using namespace std;
 
 namespace DSLib
 {
+	// 2021/5/1日加入的功能函数
 	template <class T>
 	void permutations(T list[], const int k, const int m);
 	int Fibonacci(const int n);
@@ -34,6 +36,18 @@ namespace DSLib
 	template <class T>
 	void print_subset(const T* a, int* mark, const int i, const int n);
 	void calcGrayCode(list<int>& result, const int& n);
+
+	// 2021/5/9加入的功能函数
+	template<class T> 
+	void calcRank(const T a[], const int n, int r[]);
+	template<class T>
+	void rearrange(T a[], const int n, int r[]);
+	template<class T> 
+	void bubbleSort(T a[], const int n);
+	template<class T> 
+	void selectionSort(T a[], const int n);
+	template<class T> 
+	void insertionSort(T a[], const int n);
 }
 
 template <class T>
@@ -177,4 +191,111 @@ void DSLib::calcGrayCode(list<int>& result, const int& n)
 		calcGrayCode(result, n - 1);
 	}
 }
+
+template<class T>
+void DSLib::calcRank(const T a[], const int n, int r[])
+{
+	// 第二章46页
+	// 得到数组a[0:n-1]中每个元素的名次，并存在数组r中
+	for (int i = 0; i < n; i++)
+	{
+		r[i] = 0;  // 初始化
+	}
+	for (int i = 0; i <(n-1); i++)
+	{
+		for (int j = i + 1; j < n; j++)
+		{
+			if (a[i]>a[j])
+			{
+				r[i]++;
+			}
+			else
+			{
+				r[j]++;
+			}
+		}
+	}
+}
+
+template<class T>
+void DSLib::rearrange(T a[], const int n, int r[])
+{
+	// 第二章50页
+	// 根据数组a的名次信息数组r,重排数组a的元素
+	for (int i = 0; i < n; i++)
+	{
+		while (r[i] != i)  // 防止自交换
+		{
+			int t = r[i];
+			swap(a[i], a[t]);
+			swap(r[i], r[t]);
+		}
+	}
+}
+
+template<class T>
+void DSLib::bubbleSort(T a[], const int n)
+{
+	// 第二章52页
+	// 及时终止的冒泡排序
+	bool swapped = true;
+	for (int i = n-1; i>0; i--)
+	{
+		swapped = false;
+		for (int j = 0; j <i; j++)
+		{
+			if (a[j]>a[j+1])
+			{
+				swap(a[j], a[j+1]);
+				swapped = true;  // 发生交换
+			}
+		}
+	}
+
+}
+
+template<class T>
+void DSLib::selectionSort(T a[], const int n)
+{
+	// 第二章第51页
+	// 及时终止的选择排序
+	int indexOfMax = 0;
+	bool sorted = false;
+	for (int size = n; size > 1 && !sorted; size--)
+	{
+		indexOfMax = 0;
+		sorted = true;
+		for (int i = 1; i < size; i++)
+		{
+			if (a[i]>=a[indexOfMax])
+			{
+				indexOfMax = i;
+			}
+			else
+			{
+				sorted = false; // 只要被执行一次说明数组是无序的
+			}
+		}
+		swap(a[indexOfMax], a[size - 1]);
+	}
+}
+
+template<class T>
+void DSLib::insertionSort(T a[], const int n)
+{
+	// 第二章53页
+	// 插入排序的程序
+	int j = 0;
+	T t = a[0];
+	for (int i = 1; i < n; i++)
+	{
+		T t = a[i];
+		for (j = i - 1; j >= 0 && a[j]>t; j--)
+		{
+			a[j + 1] = a[j];
+		}
+		a[j + 1] = t;
+	}
+}
+
 #endif

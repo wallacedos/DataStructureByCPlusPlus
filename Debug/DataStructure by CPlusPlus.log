@@ -1,3 +1,6 @@
 ﻿  main.cpp
+<<<<<<< HEAD
   LINK : 没有找到 D:\DataStructure by CPlusPlus\Debug\DataStructure by CPlusPlus.exe 或上一个增量链接没有生成它；正在执行完全链接
+=======
+>>>>>>> e4799b1334e61a022070bd9b6a3f55b9245853ba
   DataStructure by CPlusPlus.vcxproj -> D:\DataStructure by CPlusPlus\Debug\DataStructure by CPlusPlus.exe
