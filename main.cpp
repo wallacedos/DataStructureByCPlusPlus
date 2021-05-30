@@ -10,15 +10,18 @@
 
 历史：1. 2021/5/1加入了“深入理解指针与递归函数”的测试例子；
       2. 2021/5/9加入了“基本排序方法”文章的测试例子；
+	  3. 2021/5/23加入了“认识迭代器”文章的测试例子；
 
 ********************************************************************************************************************************/
 
-#include <iostream>
+#include <iostream>          // C++标准输入输出流头文件
 
-#include "sdf.h"
+// #include "sdf.h"         // 文章01、02需要引用的自定义头文件
+
+#include <vector>          // 文章03需要引用的头文件
 
 using namespace std;
-using namespace DSLib;
+//using namespace DSLib;   // 所有自定义类与函数所在的命名空间
 
 int main()
 {
@@ -115,7 +118,8 @@ int main()
 	}
 	*/
 
-	// 02： 经典排序方法的测试程序
+	// 02： 经典排序方法的测试程序，若需要运行该部分内容，请将最后的有效代码块注释掉
+	/*
 	int num[5] = {1,2,0,2,3};
 	int* a = new int[5];
 	cout << "待排序数组为：" << endl;
@@ -174,7 +178,58 @@ int main()
 		cout << a[i] << " ";
 	}
 	cout << endl;
-	delete[] a;
+	delete[] a; a = NULL;
+	*/
+    
+    // 03: 认识迭代器
+    int x[3] = { 3,2,1};
+	cout << "使用指针遍历数组x：" << endl;
+	for (int* y = x; y != x + 3; y++) // 用指针y遍历数组x
+	{
+		cout <<*y<< " ";
+	}
+	cout << endl;
+
+	vector<int> v1(x, x + 3);  // 把地址区间[x,x+3)中存储的内容拷贝给v1
+	vector<int>::iterator i;
+	cout << "使用迭代器逐个访问一维向量v1的元素：" << endl;
+	for (i = v1.begin(); i != v1.end(); i++)
+	{
+		cout<< *i<< " ";
+	}
+	cout << endl;
+
+
+	vector<int> v2(v1.begin() + 1, v1.end());  // 把地址区间[v1.begin()+1, v1.end())拷贝给v2
+	cout << "使用迭代器逐个访问一维向量v2的元素：" << endl;
+	for (i = v2.begin(); i != v2.end(); i++)
+	{
+		cout << *i << " ";
+	}
+	cout << endl;
+
+	int m = 3;
+	int n = 2;
+	vector<vector<int>> v3(m, vector<int>(n, 0));
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			v3[i][j] = (i+1) * (j+1);   // 赋值
+		}
+	}
+
+	vector<vector<int>>::iterator rowIter;  // 二维向量的行迭代器
+	vector<int>::iterator colIter;          // 每一行的迭代器
+	cout << "使用迭代器逐个访问二维向量v3的元素：" << endl;
+	for (rowIter=v3.begin();rowIter!=v3.end();rowIter++)
+	{
+		for (colIter = (*rowIter).begin(); colIter != (*rowIter).end(); colIter++)
+		{
+			cout << *colIter << " ";
+		}
+		cout << endl;
+	}
 
 	return 0;
 }
