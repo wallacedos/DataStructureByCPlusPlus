@@ -1,7 +1,7 @@
 /********************************************************************************************************************************
 文件名： main.cpp
 功能描述：主函数，用以测试相关功能函数与数据结构类。更多信息，可关注微信公众号地震成像与模拟，当中的专辑《算法与数据结构》的文章
-          给出了关于本程序中每个测试例子的详细描述。
+		  给出了关于本程序中每个测试例子的详细描述。
 参考资料：萨尼.《数据结构、算法与应用C++语言描述第二版》[M].北京：机械工业出版社，2019.
 版本：1.0
 日期：2021/5/1
@@ -9,8 +9,9 @@
 作者：闫英伟
 
 历史：1. 2021/5/1加入了“深入理解指针与递归函数”的测试例子；
-      2. 2021/5/9加入了“基本排序方法”文章的测试例子；
+	  2. 2021/5/9加入了“基本排序方法”文章的测试例子；
 	  3. 2021/5/23加入了“认识迭代器”文章的测试例子；
+	  4. 2021/6/20加入了“线性表（一）：数组描述”文章的测试例子
 
 ********************************************************************************************************************************/
 
@@ -18,10 +19,12 @@
 
 // #include "sdf.h"         // 文章01、02需要引用的自定义头文件
 
-#include <vector>          // 文章03需要引用的头文件
+//#include <vector>          // 文章03需要引用的头文件
+
+#include "arrayListNoSTL.h"
 
 using namespace std;
-//using namespace DSLib;   // 所有自定义类与函数所在的命名空间
+using namespace DSLib;   // 所有自定义类与函数所在的命名空间
 
 int main()
 {
@@ -33,7 +36,7 @@ int main()
 	cout << "c = " << c << " *pc = " << *pc << " &c = " << (void*)&c << " pc = " << (void*)pc << endl;
 	cout << "&c==pc " << ((void*)& c == (void*)pc) << endl;
 	cout << "c = " << c << " *(&c) = " << *(&c) << " pc = " << (void*)pc << " *(&pc) = " << (void*)(*(&pc)) << endl;
-	
+
 
 	cout << "sizeof(char) = " << sizeof(char) <<" sizeof(c)="<<sizeof(c)<<endl;
 	cout << "sizeof(char*) = " << sizeof(char*) << " sizeof(pc) = " << sizeof(pc) << endl;
@@ -41,14 +44,14 @@ int main()
 	cout << endl;
 
 	double d = 123.02;
-	double* pd = NULL;  
+	double* pd = NULL;
 
 	cout << "pd = " << pd << " &pd = " << &pd << endl;
 
 	pd = &d; // 令指针指向double型变量的首地址
 
 	// 指针所占内存的字节数依赖于编译平台，等于编译平台的一个机器字长度，若机器字长32位则只占4字节
-	cout << "sizeof(double*) = " << sizeof(double*) << " sizeof(pd) = " << sizeof(pd) << endl;  
+	cout << "sizeof(double*) = " << sizeof(double*) << " sizeof(pd) = " << sizeof(pd) << endl;
 	cout << "d = " << d << endl;
 
 	// *号起到解引用作用，像是一把钥匙，能够得到指针指向的变量；指针变量pd存储着变量d的地址，*pd则得到变量d
@@ -101,10 +104,10 @@ int main()
 	delete[]s;  // 通过关键字new分配的空间，不使用时一定要delete
 
 	cout << "输出格雷码位置变化序列:" << endl;
-	list<int> r; 
+	list<int> r;
 	list<int>::iterator i;
 	calcGrayCode(r, 3);
-	
+
 	for (i=r.begin();i!=r.end();i++)
 	{
 		if (i == r.begin())
@@ -180,9 +183,10 @@ int main()
 	cout << endl;
 	delete[] a; a = NULL;
 	*/
-    
-    // 03: 认识迭代器
-    int x[3] = { 3,2,1};
+
+	// 03: 认识迭代器
+	/*
+	int x[3] = { 3,2,1};
 	cout << "使用指针遍历数组x：" << endl;
 	for (int* y = x; y != x + 3; y++) // 用指针y遍历数组x
 	{
@@ -230,6 +234,103 @@ int main()
 		}
 		cout << endl;
 	}
+	*/
+
+	// 04 线性表（一）：数组描述
+	linearList<double>* x = new arrayListNoSTL<double>(20);
+	arrayListNoSTL<int> y(2), z;
+
+	// 测试容量函数
+	cout << "Capacity of x, y and z = "
+		<< ((arrayListNoSTL<double>*) x)->capacity() << ", "
+		<< y.capacity() << ", "
+		<< z.capacity() << endl;
+
+
+	// 测试线性表的尺寸(线性表中元素的个数）函数
+	cout << "Initial size of x, y, and z = "
+		<< x->size() << ", "
+		<< y.size() << ", "
+		<< z.size() << endl;
+
+	// 测试empty函数
+	if (x->empty()) cout << "x is empty" << endl;
+	else cout << "x is not empty" << endl;
+	if (y.empty()) cout << "y is empty" << endl;
+	else cout << "y is not empty" << endl;
+
+	// 测试插入函数
+	y.insert(0, 2);
+	y.insert(1, 6);
+	y.insert(0, 1);
+	y.insert(2, 4);
+	y.insert(3, 5);
+	y.insert(2, 3);
+	cout << "Inserted 6 integers, list y should be 1 2 3 4 5 6" << endl;
+	cout << "Size of y = " << y.size() << endl;
+	cout << "Capacity of y = " << y.capacity() << endl;
+	if (y.empty()) cout << "y is empty" << endl;
+	else cout << "y is not empty" << endl;
+	y.output(cout);
+	cout << endl << "Testing overloaded <<" << endl;
+	cout << y << endl;
+
+	// 测试indexOf函数
+	int index = y.indexOf(4);
+	if (index < 0) cout << "4 not found" << endl;
+	else cout << "The index of 4 is " << index << endl;
+
+	index = y.indexOf(7);
+	if (index < 0) cout << "7 not found" << endl;
+	else cout << "The index of 7 is " << index << endl;
+
+	// 测试get函数
+	cout << "Element with index 0 is " << y.get(0) << endl;
+	cout << "Element with index 3 is " << y.get(3) << endl;
+
+	// 测试set函数
+	int num0 = y.get(0);
+	int num3 = y.get(3);
+	y.set(0, 15); y.set(3, 15);
+	cout << "Element with index 0 is " << y.get(0) << endl;
+	cout << "Element with index 3 is " << y.get(3) << endl;
+	y.set(0, num0); y.set(3, num3); // 恢复为原来线性表的元素
+
+	// 测试erase函数
+	y.erase(1);
+	cout << "Element 1 erased" << endl;
+	cout << "The list is " << y << endl;
+	y.erase(2);
+	cout << "Element 2 erased" << endl;
+	cout << "The list is " << y << endl;
+
+	cout << "Size of y = " << y.size() << endl;
+	cout << "Capacity of y = " << y.capacity() << endl;
+	if (y.empty()) cout << "y is empty" << endl;
+	else cout << "y is not empty" << endl;
+
+	try { y.insert(-3, 0); }
+	catch (illegalIndex e)
+	{
+		cout << "Illegal index exception" << endl;
+		cout << "Insert index must be between 0 and list size" << endl;
+		e.outputMessage();
+	}
+
+	// 测试拷贝构造函数
+	arrayListNoSTL<int> w(y);
+	y.erase(0);
+	y.erase(0);
+	cout << "w should be old y, new y has first 2 elements removed" << endl;
+	cout << "w is " << w << endl;
+	cout << "y is " << y << endl;
+
+	// 继续插入操作
+	y.insert(0, 4);
+	y.insert(0, 5);
+	y.insert(0, 6);
+	y.insert(0, 7);
+	cout << "y is " << y << endl;
 
 	return 0;
 }

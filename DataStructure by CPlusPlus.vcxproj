@@ -146,6 +146,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="arrayListNoSTL.h" />
+    <ClInclude Include="changeLength1D.h" />
+    <ClInclude Include="linearList.h" />
+    <ClInclude Include="myExceptions.h" />
     <ClInclude Include="sdf.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
