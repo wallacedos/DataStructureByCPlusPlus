@@ -12,6 +12,7 @@
 	  2. 2021/5/9加入了“基本排序方法”文章的测试例子；
 	  3. 2021/5/23加入了“认识迭代器”文章的测试例子；
 	  4. 2021/6/20加入了“线性表（一）：数组描述”文章的测试例子
+	  5. 2021/7/17加入了“线性表（二）：丰富功能”文章的测试例子
 
 ********************************************************************************************************************************/
 
@@ -237,6 +238,7 @@ int main()
 	*/
 
 	// 04 线性表（一）：数组描述
+    /*
 	linearList<double>* x = new arrayListNoSTL<double>(20);
 	arrayListNoSTL<int> y(2), z;
 
@@ -331,6 +333,105 @@ int main()
 	y.insert(0, 6);
 	y.insert(0, 7);
 	cout << "y is " << y << endl;
+	*/
+
+
+    // 05 线性表（二）：丰富功能
+    arrayListNoSTL<int> y(10);   
+	y.trimToSize();             // 测试trimToSize函数 数组的长度此时会变成1
+	cout << "y.capacity() = "<<y.capacity() << endl;
+	cout << endl;
+
+	// 向线性表中插入元素
+	y.insert(0, 1);
+	y.insert(1, 2);
+	y.insert(2, 3);
+	y.insert(3, 4);
+	y.insert(4, 5);
+
+	y.setSize(3);   // 测试setSize函数，此时线性表的长度会变为3
+
+	for (int i = 0; i < y.size(); i++)
+	{
+		cout <<"y["<<i<<"] = "<< y[i] << endl;   // 只输出1,2,3 
+	}
+	cout << endl;
+
+	// 测试操作符[]函数
+	int a = y[2]; cout << "a = " << a << endl; 
+	y[2] = 10;
+	cout << "y[2] = " << y[2] << endl;
+	cout << endl;
+
+	// 测试操作符==、!=和<函数
+	arrayListNoSTL<int> w(y);
+	cout << "w==y is "<<(w == y)<< endl;     // 此时结果是true
+	w[1] = 10;
+	cout << "w!=y is " << (w != y) << endl;  // 此时结果会是true
+	cout << "w<y is " << (w < y) << endl;    // 此时结果是false
+	cout << endl;
+
+	// 测试push_back和pop_back函数
+	y.push_back(5);
+	y.push_back(6);
+	y.push_back(7);
+	y.push_back(8);
+
+	for (int i = 0; i < y.size(); i++)
+	{
+		cout << "y[" << i << "] = " << y[i] << endl; // 会输出1,2,10,5,6,7,8
+	}
+
+	y.pop_back();
+	y.pop_back();
+
+	for (int i = 0; i < y.size(); i++)
+	{
+		cout << "y[" << i << "] = " << y[i] << endl; // 会输出1,2,10,5,6
+	}
+	cout << endl;
+
+	// 测试swap函数
+	y.swap(w);
+	for (int i = 0; i < w.size(); i++)
+	{
+		cout << "w[" << i << "] = " << w[i] << endl; // 会输出1,2,10,5,6
+	}
+	cout << endl;
+
+	// 测试reserve函数
+	y.reserve(100);
+	cout << "y.capacity() = " << y.capacity() << endl;
+	cout << endl;
+
+	// 测试setA函数
+	a = y.setA(2, 101);
+	cout << "a = " << a << "  y[2] = " << y[2] << endl;
+	cout << endl;
+
+	// 测试clear函数
+	y.clear();
+	cout << "The size of the list is " << y.size() << endl;
+	cout << endl;
+
+	// 测试removeRange函数
+	y.insert(0, 1);
+	y.insert(1, 2);
+	y.insert(2, 3);
+	y.insert(3, 4);
+	y.insert(4, 5);
+	y.insert(5, 6);
+
+	y.removeRange(2, 4);
+	for (int i = 0; i < y.size(); i++)
+	{
+	    cout << "y[" << i << "] = " << y[i] << endl; // 会输出1,2,5,6
+	}
+	cout << endl;
+
+	// 测试lastIndexOf函数
+	int theIndex = y.lastIndexOf(5);
+	cout << "theIndex = " << theIndex << endl;
 
 	return 0;
 }

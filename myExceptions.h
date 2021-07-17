@@ -34,6 +34,20 @@ namespace DSLib
 		string message;
 	};
 
+	// 异常信息类
+	class exceptionInfo
+	{
+	public:
+		exceptionInfo(string theMessage = "exceptionInfo")
+		{
+			message = theMessage;
+		}
+		void outputMessage() { cout << message << endl; }
+	private:
+		string message;
+	};
+
+
 	// 输入数据非法
 	class illegalInputData
 	{
