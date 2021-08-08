@@ -21,6 +21,20 @@ using namespace std;
 
 namespace DSLib
 {
+	// 未定义异常类
+	class undefinedException
+	{
+	public:
+		undefinedException(string theMessage = "undefined exception")
+		{
+			message = theMessage;
+		}
+		void  outputMessage() { cout << message << endl; }
+	private:
+		string message;
+	};
+
+
 	// 非法参数异常类
 	class illegalParameterValue
 	{

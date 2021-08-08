@@ -11,8 +11,9 @@
 历史：1. 2021/5/1加入了“深入理解指针与递归函数”的测试例子；
 	  2. 2021/5/9加入了“基本排序方法”文章的测试例子；
 	  3. 2021/5/23加入了“认识迭代器”文章的测试例子；
-	  4. 2021/6/20加入了“线性表（一）：数组描述”文章的测试例子
-	  5. 2021/7/17加入了“线性表（二）：丰富功能”文章的测试例子
+	  4. 2021/6/20加入了“线性表（一）：数组描述”文章的测试例子；
+	  5. 2021/7/17加入了“线性表（二）：丰富功能”文章的测试例子；
+	  6. 2021/8/8加入了“线性表（三）：丰富功能”文章的测试例子；
 
 ********************************************************************************************************************************/
 
@@ -29,7 +30,7 @@ using namespace DSLib;   // 所有自定义类与函数所在的命名空间
 
 int main()
 {
-	// 01-0： 深入理解指针部分, 若需要运行该部分内容，请将最后的有效代码块注释掉
+// 01-0： 深入理解指针部分, 若需要运行该部分内容，请将最后的有效代码块注释掉
 	/*
 	char c = 'c';
 	char* pc = &c;   // 令指针pc指向char型变量c的首地址
@@ -77,7 +78,7 @@ int main()
 	*/
 
 
-	//01-1： 深入理解递归函数部分，若需要运行该部分内容，请将最后的有效代码块注释掉
+//01-1： 深入理解递归函数部分，若需要运行该部分内容，请将最后的有效代码块注释掉
 	/*
 	char* s = new char[3];
 	cout << "字符数组s为：";
@@ -122,7 +123,7 @@ int main()
 	}
 	*/
 
-	// 02： 经典排序方法的测试程序，若需要运行该部分内容，请将最后的有效代码块注释掉
+// 02： 经典排序方法的测试程序，若需要运行该部分内容，请将最后的有效代码块注释掉
 	/*
 	int num[5] = {1,2,0,2,3};
 	int* a = new int[5];
@@ -185,7 +186,7 @@ int main()
 	delete[] a; a = NULL;
 	*/
 
-	// 03: 认识迭代器
+// 03: 认识迭代器，若需要运行该部分内容，请将最后的有效代码块注释掉
 	/*
 	int x[3] = { 3,2,1};
 	cout << "使用指针遍历数组x：" << endl;
@@ -237,7 +238,7 @@ int main()
 	}
 	*/
 
-	// 04 线性表（一）：数组描述
+// 04 线性表（一）：数组描述，若需要运行该部分内容，请将最后的有效代码块注释掉
     /*
 	linearList<double>* x = new arrayListNoSTL<double>(20);
 	arrayListNoSTL<int> y(2), z;
@@ -336,7 +337,8 @@ int main()
 	*/
 
 
-    // 05 线性表（二）：丰富功能
+// 05 线性表（二）：丰富功能，若需要运行该部分内容，请将最后的有效代码块注释掉
+    /*
     arrayListNoSTL<int> y(10);   
 	y.trimToSize();             // 测试trimToSize函数 数组的长度此时会变成1
 	cout << "y.capacity() = "<<y.capacity() << endl;
@@ -432,6 +434,83 @@ int main()
 	// 测试lastIndexOf函数
 	int theIndex = y.lastIndexOf(5);
 	cout << "theIndex = " << theIndex << endl;
+	*/
+ 
+
+    // 06 线性表（三）：丰富功能，
+    arrayListNoSTL<int> y(10);
+	arrayListNoSTL<int> a(3);
+	arrayListNoSTL<int> b(5);
+	a.push_back(2); a.push_back(1);
+	b.push_back(3); b.push_back(4); b.push_back(5); b.push_back(6);
+
+	a.reverse();  // 原地颠倒线性表对象a的元素
+	cout << "Test for reverse function..." << endl;
+	for (int i = 0; i < a.size(); i++)
+	{
+		cout << "a[" << i << "] = " << a[i] << endl;
+	}
+	cout << endl;
+
+	b.leftShift(1);  // 把线性表对象b的元素向左移动1个位置
+	cout << "Test for leftShift function..." << endl;
+	for (int i = 0; i < b.size(); i++)
+	{
+		cout << "b[" << i << "] = " << b[i] << endl;
+	}
+	cout << endl;
+
+	b.circularShift(2);  // 把线性表b的元素循环移动2个位置
+	cout << "Test for circularShift function..." << endl;
+	for (int i = 0; i < b.size(); i++)
+	{
+		cout << "b[" << i << "] = " << b[i] << endl;
+	}
+	cout << endl;
+
+	b.half();  // 对线性表b的元素隔一个删除一个
+	cout << "Test for half function..." << endl;
+	for (int i = 0; i < b.size(); i++)
+	{
+		cout << "b[" << i << "] = " << b[i] << endl;
+	}
+	cout << endl;
+
+	arrayListNoSTL<int>::iterator iter;    // 定义线性表的迭代器
+	cout << "Test for arrayListNoSTL<T>::iterator..." << endl;
+	for (iter = b.begin(); iter != b.end(); iter++)
+	{
+		cout << *iter << endl;
+	}
+	cout << endl;
+
+	y.meld(a, b);    //生成一个新的线性表，从a的第0个元素开始，交替地包含a和b的元素
+	cout << "Test for meld funtion..." << endl;
+	for (int i = 0; i <y.size(); i++)
+	{
+		cout <<"y["<<i<<"] = "<< y[i] << "\t";
+	}
+	cout << endl<<endl;
+
+	b[0] = 1; b[1] = 3;     // 对b中的元素重新赋值
+	y.merge(a, b);          // 利用归并排序算法，使其包括非递减线性表a和b的所有元素
+	cout << "Test for merge funtion..." << endl;
+	for (int i = 0; i < y.size(); i++)
+	{
+		cout << "y[" << i << "] = " << y[i] << "\t";
+	}
+	cout << endl;
+
+	y.split(a, b);   // 生成两个线性表a和b，a包含y中索引为偶数的元素，b包含其余的元素
+	cout << "Test for split function..." << endl;
+	for (int i = 0; i < a.size(); i++)
+	{
+		cout << "a[" << i << "] = " << a[i] << endl;
+	}
+	for (int i = 0; i < b.size(); i++)
+	{
+		cout << "b[" << i << "] = " << b[i] << endl;
+	}
 
 	return 0;
 }

@@ -10,7 +10,8 @@
 作者：闫英伟
 
 历史：1. 2021/6/19新建arrayListNoSTL头文件，加入基本函数；
-      2. 2021/7/17按参考资料课后习题的要求，丰富了线性表的功能，即加入了其他一些功能函数
+      2. 2021/7/17按参考资料课后习题的要求，丰富了线性表的功能，即加入了其他一些功能函数；
+	  3. 2021/8/8进一步地丰富了线性表的功能，增加了其他一些功能函数；
 
 ********************************************************************************************************************************/
 
@@ -18,6 +19,7 @@
 #include<sstream>
 #include<string>
 
+#include "sdf.h"
 #include "linearList.h"
 #include "myExceptions.h"
 #include "changeLength1D.h"
@@ -61,6 +63,25 @@ namespace DSLib
 		void clear();                                             // 清空线性表
 		void removeRange(int start, int end);                     // 删除索引范围为[start, end)的元素
 		int lastIndexOf(const T& theElement) const;               // 返回指定元素最后出现时的索引
+		void reverse();                                           // 原地颠倒线性表的元素
+		void leftShift(int i);                                    // 把线性表的元素向左移动i个位置
+		void circularShift(int i);                                // 把线性表循环移动i个位置
+		void half();                                              // 隔一个删除一个
+
+		// arrayListNoSTL的迭代器
+		class iterator;
+		iterator begin() { return iterator(element); }
+		iterator end() { return iterator(element + listSize); }
+
+		// 生成一个新的线性表，从a的第0个元素开始，交替地包含a和b的元素
+		void meld(const arrayListNoSTL<T>& a, const arrayListNoSTL<T>& b);   
+
+		// a和b是类arrayListNoSTL的两个对象，且它们的元素从左到右非递减有序，利用归并排序算法生成一个新的
+		// 线性表，使其包含a和b的所有元素
+		void merge(const arrayListNoSTL<T>& a, const arrayListNoSTL<T>& b);
+
+		// 生成两个线性表a和b，a包含*this中索引为偶数的元素，b包含其余的元素
+		void split(arrayListNoSTL<T>& a, arrayListNoSTL<T>& b);
 
 
 	protected:
@@ -402,6 +423,252 @@ namespace DSLib
 			}
 		}
 		return theIndex;
+	}
+
+	template<class T>
+	void arrayListNoSTL<T>::reverse()
+	{
+		for (int i = 0; i < (listSize / 2); i++)
+		{
+			swapElement(element + i, element + listSize - i - 1);
+		}
+	}
+
+	template<class T>
+	void arrayListNoSTL<T>::leftShift(int i)
+	{
+		if (i <0 || i>listSize)
+		{
+			// 无效的参数i
+			ostringstream s;
+			s << "parameter i = " <<i<< "is illegal. It must be in the range of 0 to " << listSize<< ".";
+			throw illegalParameterValue(s.str());
+		}
+
+		int newSize = 0;
+		if (i<= listSize)
+		{
+			newSize = listSize - i;
+			copy(element + i, element + listSize, element);
+		}
+
+		// 剩余元素作析构
+		for (int i = newSize; i < listSize; i++)
+			element[i].~T();
+
+		listSize = newSize;
+	}
+
+	template<class T>
+	void arrayListNoSTL<T>::circularShift(int i)
+	{
+		if (i<0 || i>listSize)
+		{
+			// 无效的参数i
+			ostringstream s;
+			s << "parameter i = " << i << "is illegal. It must be in the range of 0 to " << listSize << ".";
+			throw illegalParameterValue(s.str());
+		}
+
+		T* s = new T[i];    // 创建辅助数组s
+		for (int k = 0; k < i; k++)
+		{
+			s[k] = element[k];
+		}
+
+		for (int k = 0; k < (listSize - i); k++)
+		{
+			element[k] = element[k + i];
+		}
+
+		for (int k = (listSize - i); k < listSize; k++)
+		{
+			element[k] = s[k - listSize + i];
+		}
+		delete[]s;
+		s = NULL;
+	}
+
+	template<class T>
+	void arrayListNoSTL<T>::half()
+	{
+		int newListSize = (listSize + 1) / 2;
+		for (int i = 0; i < newListSize; i++)
+		{
+			element[i] = element[2 * i];
+		}
+
+		for (int i = newListSize; i < listSize; i++)
+		{
+			element[i].~T();
+		}
+		
+		listSize = newListSize;
+	}
+
+	// 线性表的迭代器
+	template<class T>
+	class arrayListNoSTL<T>::iterator
+	{
+	public:
+		typedef bidirectional_iterator_tag iterator_category;
+		typedef T value_type;
+		typedef ptrdiff_t difference_type;
+		typedef T* pointer;
+		typedef T& reference;
+
+		// 构造函数
+		iterator(T* thePosition = 0) { position = thePosition; }
+
+		// 解引用操作符
+		T& operator*() const { return *position; }
+		T* operator->() const { return &*position; }
+
+		// 自增
+		iterator& operator++()   // 前置自增
+		{
+			++position; return *this;
+		}
+		iterator operator++(int) // 后置自增
+		{
+			iterator old = *this;
+			++position;
+			return old;
+		}
+
+		// 自减
+		iterator& operator--()   // 前置自减
+		{
+			--position; return *this;
+		}
+		iterator operator--(int) // 后置自减
+		{
+			iterator old = *this;
+			--position;
+			return old;
+		}
+
+		// !=和==操作符的定义函数
+		bool operator!=(const iterator right) const
+		{
+			return position != right.position;
+		}
+		bool operator==(const iterator right) const
+		{
+			return position == right.position;
+		}
+	protected:
+		T* position;
+	};  
+
+	template<class T>
+	void arrayListNoSTL<T>::meld(const arrayListNoSTL<T>& a, const arrayListNoSTL<T>& b)
+	{
+		delete[]element;
+		int aListSize = a.listSize;
+		int bListSize = b.listSize;
+
+		int newListSize = aListSize + bListSize;
+
+		// 确定线性表的空间是否够用
+		if (newListSize> arrayLength)
+		{
+			arrayLength = newListSize;
+		}
+
+		listSize = newListSize;
+		element = new T[arrayLength];
+
+		if (aListSize == bListSize)
+		{
+			for (int i = 0; i < aListSize; i++)
+			{
+				element[2*i] = a.element[i];
+				element[2 * i + 1] = b.element[i];
+			}
+		}
+		else if (aListSize > bListSize)
+		{
+			for (int i = 0; i < bListSize; i++)
+			{
+				element[2 * i] = a.element[i];
+				element[2 * i + 1] = b.element[i];
+			}
+			copy(a.element+bListSize, a.element+aListSize, element+(2 * bListSize));
+		}
+		else if (aListSize < bListSize)
+		{
+			for (int i = 0; i < aListSize; i++)
+			{
+				element[2 * i] = a.element[i];
+				element[2 * i + 1] = b.element[i];
+			}
+			copy(b.element + aListSize, b.element + bListSize, element + (2 * aListSize));
+		}
+		else
+		{
+			// 触发未定义的异常
+			ostringstream s;
+			s <<"the program has triggered an undefined exception...";
+			throw undefinedException(s.str());
+		}
+	}
+
+	template<class T>
+	void arrayListNoSTL<T>::merge(const arrayListNoSTL<T>& a, const arrayListNoSTL<T>& b)
+	{
+	    int ca = 0;                       // 线性表a的游标
+		int cb = 0;                       // 线性表b的游标
+		int ct = 0;                       // 当前线性表的游标
+		
+	    // 释放当前线性表，并为当前线性表重新申请内存空间
+		delete[] element;
+		arrayLength = a.listSize + b.listSize;
+		element = new T[arrayLength];
+
+		// 由a到b作归并
+		while ((ca < a.listSize) && (cb < b.listSize))
+			if (a.element[ca] <= b.element[cb])
+				element[ct++] = a.element[ca++];
+			else
+				element[ct++] = b.element[cb++];
+
+		// 处理剩余元素
+		copy(a.element + ca, a.element + a.listSize, element + ct);
+		ct += a.listSize - ca;
+		copy(b.element + cb, b.element + b.listSize, element + ct);
+		ct += b.listSize - cb;
+
+		listSize = ct;
+	}
+
+	template<class T>
+	void arrayListNoSTL<T>::split(arrayListNoSTL<T>& a, arrayListNoSTL<T>& b)
+	{
+		int aListSize = (listSize + 1) / 2;
+		int bListSize = listSize - aListSize;
+		delete[]a.element;
+		delete[]b.element;
+
+		int aArrayLength = aListSize > a.arrayLength ? aListSize : a.arrayLength;
+		int bArrayLength = bListSize > b.arrayLength ? bListSize : b.arrayLength;
+
+		a.element = new T[aArrayLength];
+		b.element = new T[bArrayLength];
+		a.arrayLength = aArrayLength;
+		b.arrayLength = bArrayLength;
+		a.listSize = aListSize;
+		b.listSize = bListSize;
+
+		for (int i = 0; i < aListSize; i++)
+		{
+			a.element[i] = element[2 * i];
+		}
+
+		for (int i = 0; i < bListSize; i++)
+		{
+			b.element[i] = element[2 * i + 1];
+		}
 	}
 }
 #endif

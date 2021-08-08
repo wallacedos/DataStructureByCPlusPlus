@@ -48,6 +48,10 @@ namespace DSLib
 	void selectionSort(T a[], const int n);
 	template<class T> 
 	void insertionSort(T a[], const int n);
+
+	// 2021/7/24加入的功能函数，实现交换两个元素
+	template<class T>
+	void swapElement(T* a, T* b);
 }
 
 template <class T>
@@ -296,6 +300,14 @@ void DSLib::insertionSort(T a[], const int n)
 		}
 		a[j + 1] = t;
 	}
+}
+
+template <class T>
+void DSLib::swapElement(T* a, T* b)
+{
+	T temp = *a;
+	*a = *b;
+	*b = temp;
 }
 
 #endif
